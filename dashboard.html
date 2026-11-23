@@ -965,5 +965,14 @@ html body #tbl tr.main .c-dl{color:#D4E0F2!important}
 html body #tbl .dl:not(.soon):not(.mid){color:#8FA6C4!important;font-weight:600}
 html body main div.panel[data-pane]{padding:10px 16px!important;min-height:0!important}
 html body main div.panel[data-pane] h3[data-fold]{padding:6px 0!important;min-height:0!important}
-</style><!--/UX9--></body>
+:focus-visible{outline:2px solid #70E1FF!important;outline-offset:2px!important}
+@media (max-width:760px),(pointer:coarse){html body main button,html body main select,html body main input,html body main [role=button],html body .chip{min-height:44px!important}}
+</style><script>(function(){/* UX11: 대시보드 하위 탭 기억 */
+ function mem(){var st=document.querySelector('.subtabs');if(!st||st.dataset.ux11)return;st.dataset.ux11=1;
+  st.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b)try{localStorage.setItem('kx-dash-sub',b.dataset.p)}catch(_){}});
+  var v=null;try{v=localStorage.getItem('kx-dash-sub')}catch(_){} var b=v&&st.querySelector('button[data-p="'+v+'"]');
+  if(b&&b.offsetParent!==null&&b.getAttribute('aria-selected')!=='true')b.click();}
+ mem();setTimeout(mem,600);setTimeout(mem,1800);
+})();
+</script><!--/UX9--></body>
 </html>

@@ -1063,8 +1063,39 @@ html body .subtabs button[aria-selected=true]{background:#1A3D66!important;color
  header .top{padding-top:10px!important;padding-bottom:6px!important}
 }
 @media (max-width:760px){header .top{min-height:0!important;margin-bottom:0!important} #sum .subtabs{margin-top:4px!important}}
+/* UX11: 사용성 기준 v1.0 반영 — 44px 터치, 포커스 표시, 숫자 카드에서 바로 이동 */
+:focus-visible{outline:2px solid #70E1FF!important;outline-offset:2px!important}
+#sum .kpi.go9,#sum .kpi.go27,#sum .kpi.goall{cursor:pointer;position:relative}
+#sum .kpi .gox{font-size:13px;font-weight:700;color:#A7BAD3;margin-top:6px}
+#sum .kpi.go9 .gox{color:#FF8A5B}#sum .kpi.go27 .gox{color:#FF6B7A}
+@media (max-width:760px),(pointer:coarse){
+ header a,header button,nav a,.subtabs button,#sum button,#sum select,#sum summary,#sum .card a,.go a,.go button,.obtabs button{min-height:44px!important}
+}
 </style><script>(function(){/* UX9: 휴대폰 요약에서 핵심 숫자를 실행 정보보다 먼저 */
  function mv(){var w=document.querySelector('#sum .wrap');if(!w)return;var k=w.querySelector(':scope > .kpis'),f=w.querySelector(':scope > .fresh');if(k&&f&&k.nextElementSibling!==f&&f.compareDocumentPosition(k)&Node.DOCUMENT_POSITION_FOLLOWING){w.insertBefore(k,f);}}
  mv();setTimeout(mv,400);setTimeout(mv,1500);
+})();
+(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
+ var demo=/[?&]demo=1/.test(location.search);
+ function blk(t){return [].slice.call(document.querySelectorAll('#sum .wrap > .blk')).find(function(b){return b.textContent.trim().indexOf(t)===0;});}
+ function setup(){
+  var ks=document.querySelectorAll('#sum .kpi');if(!ks.length||ks[0].dataset.ux11)return;
+  var map=[['goall','전체 목록 보기',function(){location.hash='#dashboard';}],null,['go9','추천 사업 보기',function(){var b=blk('우선검토');b&&b.scrollIntoView({behavior:'smooth',block:'start'});}],['go27','마감 일정 보기',function(){var b=blk('마감 임박');b&&b.scrollIntoView({behavior:'smooth',block:'start'});}]];
+  ks.forEach(function(k,i){k.dataset.ux11=1;var m=map[i];if(!m)return;k.classList.add(m[0]);k.setAttribute('role','button');k.tabIndex=0;var s=document.createElement('span');s.className='gox';s.textContent=m[1];k.appendChild(s);
+   k.addEventListener('click',m[2]);k.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();m[2]();}});});
+ }
+ function mem(){ /* 요약 하위 탭 기억 (발표자 모드는 항상 '오늘') */
+  var st=document.querySelector('#sum .subtabs');if(!st||st.dataset.ux11)return;st.dataset.ux11=1;
+  st.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b)try{localStorage.setItem('kx-sum-sub',b.dataset.p)}catch(_){}});
+  if(!demo){var v=null;try{v=localStorage.getItem('kx-sum-sub')}catch(_){} var b=v&&st.querySelector('button[data-p="'+v+'"]');if(b&&b.getAttribute('aria-selected')!=='true')b.click();}
+ }
+ function run(){setup();mem();}
+ run();setTimeout(run,500);setTimeout(run,1600);
+ /* 탭별 스크롤 위치 보존 (각 화면 영역 기준) */
+ var K='kx-scroll-';
+ document.addEventListener('scroll',function(e){var t=e.target;if(t&&t.id)try{sessionStorage.setItem(K+t.id,String(t.scrollTop))}catch(_){}} ,true);
+ function restore(){document.querySelectorAll('[data-view]').forEach(function(v){if(!v.id)return;var y=0;try{y=+sessionStorage.getItem(K+v.id)||0}catch(_){} if(y&&!v.scrollTop)v.scrollTop=y;});}
+ window.addEventListener('hashchange',function(){setTimeout(restore,80);});
+ if(!demo)setTimeout(restore,1800);
 })();
 </script><!--/UX9--></body></html>
