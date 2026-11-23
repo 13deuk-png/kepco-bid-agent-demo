@@ -1034,4 +1034,20 @@ addEventListener("message",e=>{ const d=e.data; if(d&&d.kepcoTab&&["summary","da
 
 </script>
 
-</body></html>
+<!--UX9--><style id="ux9">/* UX9: 셸 정리 — 안내 알약 줄 제거, 휴대폰 첫 화면에 핵심 숫자 */
+.hint{display:none!important}
+@media (max-width:760px){
+ #sum .wrap{padding-bottom:120px!important}
+ #sum .fresh{margin-top:14px!important}
+}
+/* 색 역할 통일: 우선검토=주황, 마감=산호빨강 */
+.kpi.hl{border-color:#FF8A5B!important;box-shadow:0 0 22px #ff8a5b33!important}
+.kpi.hl .v{color:#FF8A5B!important}
+.kpi.wa .v{color:#FF6B7A!important}
+#sum .cards .card{border-left-color:#FF8A5B!important}
+#sum .cards .card .sc{color:#FF8A5B!important;font-size:30px!important;font-weight:800!important}
+</style><script>(function(){/* UX9: 휴대폰 요약에서 핵심 숫자를 실행 정보보다 먼저 */
+ function mv(){var w=document.querySelector('#sum .wrap');if(!w)return;var k=w.querySelector(':scope > .kpis'),f=w.querySelector(':scope > .fresh');if(k&&f&&k.nextElementSibling!==f&&f.compareDocumentPosition(k)&Node.DOCUMENT_POSITION_FOLLOWING){w.insertBefore(k,f);}}
+ mv();setTimeout(mv,400);setTimeout(mv,1500);
+})();
+</script><!--/UX9--></body></html>
