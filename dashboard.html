@@ -121,7 +121,8 @@
 .viewbadge.pub{color:#70E1FF}.viewbadge.int{color:#FF8A5B}
 .rel{margin:0;padding-left:16px}.rel li{margin:2px 0}.rel .why{color:#5E6A7D;font-size:12px}
 </style>
-</head>
+<!--UX9E--><script>try{if(window.self!==window.top)document.documentElement.classList.add('kx-emb')}catch(e){document.documentElement.classList.add('kx-emb')}</script><style id="ux9e">html.kx-emb,html.kx-emb body{background:#071A32!important;color:#D4E0F2}</style>
+<!--/UX9E--></head>
 <body>
 <header>
   <h1>해외사업 기회 대시보드 <span id="viewBadge" class="viewbadge"></span></h1>
@@ -943,7 +944,6 @@ html body #tbl thead th{background:#0A1F3B!important;color:#8FA6C4!important;fon
  html body #tbl tr.main{grid-template-columns:62px minmax(0,1fr) auto!important}
  html body #tbl .score{font-size:30px!important}
  html body #tbl tr.main .c-title a{font-size:16px!important}
- html body #tbl tr.main .c-title .tg{display:none!important}
 }
 
 /* UX10: 하위 탭을 한 덩어리 세그먼트로 */
@@ -967,12 +967,84 @@ html body main div.panel[data-pane]{padding:10px 16px!important;min-height:0!imp
 html body main div.panel[data-pane] h3[data-fold]{padding:6px 0!important;min-height:0!important}
 :focus-visible{outline:2px solid #70E1FF!important;outline-offset:2px!important}
 @media (max-width:760px),(pointer:coarse){html body main button,html body main select,html body main input,html body main [role=button],html body .chip{min-height:44px!important}}
+@media (max-width:760px){html body #tbl tr.main .c-title::after{content:"누르면 판단 근거";display:block;margin-top:6px;font-size:14px;font-weight:700;color:#70E1FF}}
+html body #tbl tr.main{scroll-margin-top:96px}
+html body #sectors button.chip[aria-pressed=true]{background:#70E1FF1f!important;border:1.5px solid #70E1FF!important;color:#FFFFFF!important;opacity:1!important;filter:none!important}
+html body #sectors button.chip[aria-pressed=false]{background:transparent!important;border:1px dashed #2C5482!important;opacity:.55!important}
+#kx-sechint{font-size:13px;color:#8FA6C4;margin:4px 0 6px}
+.kx-ask{position:fixed;inset:0;z-index:300;background:#071A32cc;display:flex;align-items:center;justify-content:center;padding:16px}
+.kx-ask .kx-ab{background:#102D50;border:1px solid #2C5482;border-radius:14px;padding:18px;max-width:420px;width:100%;color:#E6EEF9}
+.kx-ask p{font-size:14px;color:#A7BAD3;margin:6px 0 12px}
+.kx-ask input{width:100%;min-height:44px;border-radius:10px;border:1px solid #2C5482;background:#0A1F3B;color:#fff;padding:0 12px;font-size:16px;box-sizing:border-box}
+.kx-ask .kx-ar{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.kx-ask button{min-height:44px;padding:0 16px;border-radius:10px;font-weight:700;font-size:15px}
+.kx-ask .kx-no{background:transparent;border:1px solid #2C5482;color:#A7BAD3}.kx-ask .kx-ok{background:#70E1FF;border:0;color:#071A32}
+/* UX14: 저시력·한 손 감사 반영 */
+html body .detail-grid{grid-template-columns:minmax(0,7em) minmax(0,1fr)!important}
+html body .detail-grid>*{min-width:0!important;overflow-wrap:anywhere}
+@media (max-width:480px){html body .detail-grid{grid-template-columns:1fr!important}html body .detail-grid>b{margin-top:8px}}
+html body .subtabs{flex-wrap:wrap!important;overflow-x:visible!important}
+@media (max-width:760px){
+ html body #tbl tr.main .c-title .tg{display:inline-flex!important;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin:-6px 4px 0 -10px;vertical-align:middle;font-size:18px;color:#70E1FF!important;background:transparent;border:0}
+ html body #tbl tr.main td{min-width:0!important}
+ html body main h3[data-fold]{min-height:44px!important;display:flex!important;align-items:center}
+ html body .muted,html body .stby,html body #tbl .rk,html body #tbl .reg{font-size:14px!important}
+}
+@media (max-height:700px){html body .subtabs{position:static!important}}
+@media (max-width:760px){
+ html body #tbl tr.main>td.c-title{position:relative!important;padding-right:48px!important}
+ html body #tbl tr.main>td.c-title .tg{position:absolute!important;right:0;top:0;margin:0!important}
+ html body #tbl tr.main>td{background:transparent!important}
+}
 </style><script>(function(){/* UX11: 대시보드 하위 탭 기억 */
  function mem(){var st=document.querySelector('.subtabs');if(!st||st.dataset.ux11)return;st.dataset.ux11=1;
   st.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b)try{localStorage.setItem('kx-dash-sub',b.dataset.p)}catch(_){}});
   var v=null;try{v=localStorage.getItem('kx-dash-sub')}catch(_){} var b=v&&st.querySelector('button[data-p="'+v+'"]');
   if(b&&b.offsetParent!==null&&b.getAttribute('aria-selected')!=='true')b.click();}
  mem();setTimeout(mem,600);setTimeout(mem,1800);
+})();
+(function(){/* UX12: 모바일에서 제목을 눌러도 앱 밖으로 나가지 않고 근거 펼침, 요약에서 넘어온 사업 열기 */
+ document.addEventListener('click',function(e){var a=e.target.closest('#tbl tr.main .c-title a');if(!a||!window.matchMedia('(max-width:760px)').matches)return;e.preventDefault();e.stopPropagation();var tg=a.closest('tr.main').querySelector('.tg');if(tg)tg.click();},true);
+ function openReq(){var id=null;try{id=localStorage.getItem('kx-open')}catch(_){} if(!id)return;
+  var tr=[].slice.call(document.querySelectorAll('#tbl tr.main')).find(function(r){return r.getAttribute('data-id')===id});if(!tr)return;
+  try{localStorage.removeItem('kx-open')}catch(_){}
+  var ls=document.querySelector('.subtabs button[data-p="ls"]');if(ls&&ls.getAttribute('aria-selected')!=='true')ls.click();
+  tr.classList.remove('m-cap');
+  setTimeout(function(){var tg=tr.querySelector('.tg');if(tg&&tg.getAttribute('aria-expanded')!=='true')tg.click();tr.scrollIntoView({block:'start'});},200);}
+ window.addEventListener('storage',function(e){if(e.key==='kx-open')openReq();});
+ openReq();setInterval(openReq,800);
+})();
+(function(){/* UX13: 실무자 감사 반영 — 분야 칩 '이것만 보기', 수정자 이름 즉석 입력, 요약 탭과 판단 동기화 */
+ var busy=false;
+ document.addEventListener('click',function(e){var c=e.target.closest('#sectors button.chip');if(!c||busy||!e.isTrusted)return;
+  var all=[].slice.call(document.querySelectorAll('#sectors button.chip'));var on=all.filter(function(x){return x.getAttribute('aria-pressed')==='true'});
+  var pressed=c.getAttribute('aria-pressed')==='true';
+  var me=c.getAttribute('data-s'),q=function(n){return document.querySelector('#sectors button.chip[data-s="'+n+'"]')},names=all.map(function(x){return x.getAttribute('data-s')});
+  if(pressed&&on.length>1){e.preventDefault();e.stopImmediatePropagation();busy=true;names.forEach(function(n){var x=q(n);if(n!==me&&x&&x.getAttribute('aria-pressed')==='true')x.click()});busy=false;return;}
+  if(pressed&&on.length===1){e.preventDefault();e.stopImmediatePropagation();busy=true;names.forEach(function(n){var x=q(n);if(n!==me&&x&&x.getAttribute('aria-pressed')!=='true')x.click()});busy=false;return;}
+ },true);
+ var sec=document.getElementById('sectors');if(sec&&!document.getElementById('kx-sechint')){var h=document.createElement('div');h.id='kx-sechint';h.textContent='켜진 분야를 누르면 그 분야만 보입니다 · 한 번 더 누르면 전체 · 꺼진 분야를 누르면 추가';sec.insertAdjacentElement('beforebegin',h);}
+ /* 수정자 이름: 상태를 바꾸는 자리에서 바로 묻기 */
+ var prev=new WeakMap();
+ document.addEventListener('focusin',function(e){var s=e.target.closest&&e.target.closest('#tbl select[data-st]');if(s)prev.set(s,s.value)});
+ document.addEventListener('pointerdown',function(e){var s=e.target.closest&&e.target.closest('#tbl select[data-st]');if(s)prev.set(s,s.value)},true);
+ document.addEventListener('change',function(e){var s=e.target.closest&&e.target.closest('#tbl select[data-st]');if(!s)return;var ed=document.getElementById('editor');if(!ed||ed.value.trim())return;
+  e.stopImmediatePropagation();var want=s.value;if(prev.has(s))s.value=prev.get(s);else if(s.dataset.prev)s.value=s.dataset.prev;ask(function(name){ed.value=name;ed.dispatchEvent(new Event('input',{bubbles:true}));ed.dispatchEvent(new Event('change',{bubbles:true}));s.value=want;s.dispatchEvent(new Event('change',{bubbles:true}));});},true);
+ function ask(done){var o=document.createElement('div');o.className='kx-ask';o.setAttribute('role','dialog');o.setAttribute('aria-label','수정자 이름');
+  o.innerHTML='<div class="kx-ab"><b>누가 바꾸는지 적어 주세요</b><p>판단을 바꾼 사람과 시각이 함께 저장됩니다. 한 번만 입력하면 됩니다.</p><input type="text" maxlength="30" placeholder="이름" aria-label="수정자 이름"><div class="kx-ar"><button type="button" class="kx-no">취소</button><button type="button" class="kx-ok">저장하고 바꾸기</button></div></div>';
+  document.body.appendChild(o);var i=o.querySelector('input');i.focus();var close=function(){o.remove()};
+  o.querySelector('.kx-no').onclick=close;var ok=function(){var v=i.value.trim();if(!v){i.focus();return}close();done(v)};o.querySelector('.kx-ok').onclick=ok;i.addEventListener('keydown',function(ev){if(ev.key==='Enter')ok();if(ev.key==='Escape')close()});}
+ /* 요약 탭(kepco-bid-decisions-v1)과 판단 맞추기 */
+ var KEY='kepco-bid-decisions-v1',D2S={'참여 검토':'검토 진행','보류':'보류','제외':'제외'},S2D={'검토 진행':'참여 검토','보류':'보류','제외':'제외'};
+ function now(){var d=new Date(),p=function(n){return String(n).padStart(2,'0')};return p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())}
+ document.addEventListener('change',function(e){var s=e.target;if(!s||!s.matches||!s.matches('select[data-st]'))return;var m=D2S[s.value];if(!m)return;
+  try{var o=JSON.parse(localStorage.getItem(KEY)||'{}');var id=s.getAttribute('data-st');var cur=o[id]||{};if(cur.d!==m){o[id]={d:m,n:cur.n||'',t:now()};localStorage.setItem(KEY,JSON.stringify(o));}}catch(_){}});
+ window.addEventListener('storage',function(e){if(e.key!==KEY||typeof status!=='object')return;try{var o=JSON.parse(e.newValue||'{}'),ch=false;Object.keys(o).forEach(function(id){var v=o[id]&&S2D[o[id].d];if(v&&status[id]!==v){status[id]=v;ch=true;}});if(ch){store.set('bm_status',status);refresh();}}catch(_){}});
+})();
+(function(){/* UX14: 상태 칸에 포커스만 가도 이름을 요구하며 포커스를 빼앗던 동작 막기, 펼친 근거로 화면 이동 */
+ document.addEventListener('focusin',function(e){var s=e.target;if(s&&s.matches&&s.matches('select[data-st]')){s.dataset.prev=s.value;e.stopImmediatePropagation();}},true);
+ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#tbl tr.main .tg');if(!t||!window.matchMedia('(max-width:760px)').matches)return;
+  var tr=t.closest('tr.main'),id=tr&&tr.getAttribute('data-id');setTimeout(function(){var r=id&&[].slice.call(document.querySelectorAll('#tbl tr.main')).find(function(x){return x.getAttribute('data-id')===id});if(r)r.scrollIntoView({block:'start',behavior:'smooth'});},120);});
 })();
 </script><!--/UX9--></body>
 </html>

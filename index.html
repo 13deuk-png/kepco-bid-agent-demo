@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><!--UX9E--><script>document.documentElement.lang='ko';if(/[?&]demo=1/.test(location.search))document.documentElement.classList.add('kx-demo-early')</script><style id="ux9e">
+html.kx-demo-early #intro{display:none!important}
+#sum .wrap{display:flex!important;flex-direction:column!important}
+#sum .wrap>*{order:10}
+#sum .wrap>.subtabs{order:1}#sum .wrap>.qrline{order:2}#sum .wrap>.kpis{order:3}#sum .wrap>.fresh{order:4}
+html.kx-demo-early #sum .wrap>.fresh{order:2}html.kx-demo-early #sum .wrap>.qrline{display:none!important}
+</style>
+<!--/UX9E--></head><body>
 <title>해외사업 기회 Agent</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -827,11 +834,11 @@ renderTree(); renderNote(); show(); sizeCanvas(); requestAnimationFrame(step);
       if(m&&known&&m[1]!==known&&!shown){ shown=true; band.classList.add("flash","live");
         toast.innerHTML="새 업데이트가 도착했습니다 · "+m[2]+"<br><small>눌러서 최신 화면으로 보기</small>"; toast.classList.add("on"); }
     }catch(e){} };
-    setInterval(poll,20000);
+    setInterval(poll,/[?&]demo=1/.test(location.search)?20000:60000);
   }
   /* 숫자 올라가기 */
   const count=()=>document.querySelectorAll("#sum .kpi .v").forEach(el=>{ const n=parseInt(el.textContent,10); if(!isFinite(n)||n<1) return; const T0=performance.now();
-    (function f(now){ const k=Math.min(1,(now-T0)/900); el.textContent=Math.round(n*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(f); else el.textContent=n; })(T0); });
+    (function f(now){ const k=/[?&]demo=1/.test(location.search)?1:Math.max(0,Math.min(1,(now-T0)/900)); el.textContent=Math.round(n*(1-Math.pow(1-k,3))); if(k<1) requestAnimationFrame(f); else el.textContent=n; })(T0); });
   const intro=document.getElementById("intro");
   if(!intro||intro.hidden) count(); else document.addEventListener("introdone",count,{once:true});
 
@@ -1025,7 +1032,7 @@ addEventListener("message",e=>{ const d=e.data; if(d&&d.kepcoTab&&["summary","da
     const kids=[...band.children].filter(e=>e.tagName==="DIV"&&/이번 실행/.test(e.textContent)&&!e.classList.contains("runline")); kids.forEach(e=>e.classList.add("kx-dup"));
   }
   /* 발표자 모드: 새 실행이 감지되면 자동으로 새 화면 */
-  if(demo){ const t=document.getElementById("toast"); if(t) new MutationObserver(()=>{ if(t.classList.contains("on")) setTimeout(()=>location.reload(),1500); }).observe(t,{attributes:true,attributeFilter:["class"]}); }
+  if(demo){ const t=document.getElementById("toast"); if(t) new MutationObserver(()=>{ if(t.classList.contains("on")) setTimeout(()=>{try{sessionStorage.setItem('kx-demo-y',String(document.getElementById('sum').scrollTop))}catch(_){} location.reload()},1500); }).observe(t,{attributes:true,attributeFilter:["class"]}); }
   /* 보관함 하위 탭 이름: PC·모바일 같은 이름 */
   const NM={"00_대시보드.md":"현황","대시보드":"현황","00_사업지도.canvas":"사업지도"};
   const fixTabs=()=>document.querySelectorAll(".obtabs button").forEach(b=>{ const k=b.textContent.trim(); if(NM[k]){ b.title=k; b.textContent=NM[k]; } });
@@ -1071,11 +1078,37 @@ html body .subtabs button[aria-selected=true]{background:#1A3D66!important;color
 @media (max-width:760px),(pointer:coarse){
  header a,header button,nav a,.subtabs button,#sum button,#sum select,#sum summary,#sum .card a,.go a,.go button,.obtabs button{min-height:44px!important}
 }
-</style><script>(function(){/* UX9: 휴대폰 요약에서 핵심 숫자를 실행 정보보다 먼저 */
- function mv(){var w=document.querySelector('#sum .wrap');if(!w)return;var k=w.querySelector(':scope > .kpis'),f=w.querySelector(':scope > .fresh');if(k&&f&&k.nextElementSibling!==f&&f.compareDocumentPosition(k)&Node.DOCUMENT_POSITION_FOLLOWING){w.insertBefore(k,f);}}
- mv();setTimeout(mv,400);setTimeout(mv,1500);
-})();
-(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
+/* UX12: 발표자 모드 — 실행 결과를 첫 화면 크게 */
+body.kx-demo #sum .fresh>.dot,body.kx-demo #sum .fresh>div:first-of-type,body.kx-demo #sum .fresh>.sp,body.kx-demo #sum .fresh>.nx{display:none!important}
+body.kx-demo #sum .runline{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 12px!important;margin:0!important;padding:0!important;border:0!important}
+body.kx-demo #sum .runline em{grid-column:1/-1;font-size:16px!important;text-align:left!important}
+body.kx-demo #sum .runline i{display:none!important}
+body.kx-demo #sum .runline span{min-width:0!important}
+body.kx-demo #sum .runline span small{font-size:16px!important}
+body.kx-demo #sum .runline span b{font-size:28px!important;line-height:1.15;white-space:nowrap;font-variant-numeric:tabular-nums}
+@media (min-width:761px){body.kx-demo #sum .runline{grid-template-columns:repeat(5,minmax(0,1fr))}}
+body.kx-demo #toast{top:76px!important;bottom:auto!important}
+@media (max-width:760px){header .kghelp{min-width:44px!important;width:44px!important;height:44px!important}}
+@media (max-height:500px) and (orientation:landscape){header{position:static!important}header .run,header .eyebrow{display:none!important}}
+#sum .fresh.kx-stale>.dot{background:#6F84A3!important;box-shadow:none!important}
+#sum .blk{scroll-margin-top:84px}
+#sum .card .kx-why{align-self:flex-start;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid #70E1FF;background:transparent;color:#70E1FF;font-weight:700;font-size:14px;cursor:pointer}
+.kx-zoom{position:fixed;inset:0;z-index:200;background:#071A32f2;display:flex;flex-direction:column}
+.kx-zoom .kx-zx{align-self:flex-end;margin:10px 12px;min-width:64px;min-height:44px;border-radius:10px;border:1px solid #70E1FF;background:#102D50;color:#fff;font-weight:700;font-size:15px}
+.kx-zoom .kx-zi{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:0 8px 24px}
+.kx-zoom .kx-zi img{width:911px;max-width:none;display:block;background:#fff;border-radius:6px}
+@media (min-width:1000px){.kx-zoom .kx-zi{display:flex;justify-content:center}}
+/* UX14 */
+@media (max-width:760px){
+ #sum .cards{grid-template-columns:minmax(0,1fr)!important}
+ #sum .card{min-width:0!important;max-width:100%!important}
+ #sum .card .h{flex-wrap:wrap!important}
+ #sum .dl .row{grid-template-columns:auto minmax(0,1fr)!important}
+ #sum .dl .row .g{grid-column:2!important;white-space:normal!important}
+ #sum .dec input,.segbar button,#report button,#vault button{min-height:44px!important}
+}
+@media (max-height:700px){#sum .subtabs{position:static!important}}
+</style><script>(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
  var demo=/[?&]demo=1/.test(location.search);
  function blk(t){return [].slice.call(document.querySelectorAll('#sum .wrap > .blk')).find(function(b){return b.textContent.trim().indexOf(t)===0;});}
  function setup(){
@@ -1094,8 +1127,43 @@ html body .subtabs button[aria-selected=true]{background:#1A3D66!important;color
  /* 탭별 스크롤 위치 보존 (각 화면 영역 기준) */
  var K='kx-scroll-';
  document.addEventListener('scroll',function(e){var t=e.target;if(t&&t.id)try{sessionStorage.setItem(K+t.id,String(t.scrollTop))}catch(_){}} ,true);
- function restore(){document.querySelectorAll('[data-view]').forEach(function(v){if(!v.id)return;var y=0;try{y=+sessionStorage.getItem(K+v.id)||0}catch(_){} if(y&&!v.scrollTop)v.scrollTop=y;});}
+ function restore(){['sum','dashboard','report','vault','summary'].map(function(i){return document.getElementById(i)}).filter(Boolean).forEach(function(v){var y=0;try{y=+sessionStorage.getItem(K+v.id)||0}catch(_){} if(y&&!v.scrollTop)v.scrollTop=y;});}
  window.addEventListener('hashchange',function(){setTimeout(restore,80);});
  if(!demo)setTimeout(restore,1800);
+})();
+(function(){/* UX12: 발표자 모드 자동 새로고침 뒤 위치 복원, 오래된 실행 표시 */
+ if(/[?&]demo=1/.test(location.search)){var y=null;try{y=sessionStorage.getItem('kx-demo-y');sessionStorage.removeItem('kx-demo-y')}catch(_){}
+  if(y){var go=function(){var s=document.getElementById('sum');if(s)s.scrollTop=+y;};setTimeout(go,300);setTimeout(go,1200);}}
+ function stale(){var f=document.querySelector('#sum .fresh'),a=document.getElementById('fago');if(!f||!a)return;var m=a.textContent.match(/(\d+)시간/),d=a.textContent.match(/(\d+)일/);var h=(d?+d[1]*24:0)+(m?+m[1]:0);f.classList.toggle('kx-stale',h>=26);}
+ setTimeout(stale,800);setInterval(stale,60000);
+})();
+(function(){/* UX12: 요약 추천 카드 → 종합에서 그 사업 근거 바로 열기, 보고서 쪽 같은 화면 확대 */
+ function wire(){
+  document.querySelectorAll('#sum .cards .card').forEach(function(c){
+   if(c.dataset.ux12)return;var d=c.querySelector('.dec[data-id]');if(!d)return;c.dataset.ux12=1;var id=d.getAttribute('data-id');
+   var b=document.createElement('button');b.type='button';b.className='kx-why';b.textContent='근거 자세히 보기';
+   var go=function(){try{localStorage.setItem('kx-open',id)}catch(_){} location.hash='#dashboard';};
+   b.addEventListener('click',go);var r=c.querySelector('.r');(r||c.querySelector('.h')).insertAdjacentElement('afterend',b);
+   var h=c.querySelector('.h');if(h){h.style.cursor='pointer';h.addEventListener('click',go);}
+  });
+ }
+ wire();setTimeout(wire,600);setTimeout(wire,1800);
+ /* 보고서 이미지: 새 탭 대신 같은 화면에서 크게 */
+ document.addEventListener('click',function(e){var a=e.target.closest('a[href^="report-"]');if(!a||!a.querySelector('img'))return;e.preventDefault();
+  var o=document.createElement('div');o.className='kx-zoom';o.setAttribute('role','dialog');o.setAttribute('aria-label','보고서 크게 보기');
+  o.innerHTML='<button type="button" class="kx-zx">닫기</button><div class="kx-zi"><img alt=""></div>';o.querySelector('img').src=a.getAttribute('href');o.querySelector('img').alt=(a.querySelector('img').alt||'')+' 크게 보기';
+  var close=function(){o.remove();document.removeEventListener('keydown',k);};var k=function(ev){if(ev.key==='Escape')close();};
+  o.querySelector('.kx-zx').addEventListener('click',close);document.addEventListener('keydown',k);document.body.appendChild(o);o.querySelector('.kx-zx').focus();},true);
+})();
+
+(function(){/* UX13: 요약 결정 ↔ 종합 상태 동기화 (서로 덮어쓰지 않게 병합) */
+ var KEY='kepco-bid-decisions-v1',S2D={'검토 진행':'참여 검토','보류':'보류','제외':'제외'};
+ var orig=Storage.prototype.setItem,last=null;try{last=localStorage.getItem(KEY)}catch(_){}
+ Storage.prototype.setItem=function(k,v){
+  if(this===window.localStorage&&k===KEY){try{var mine=JSON.parse(v||'{}'),before=JSON.parse(last||'{}'),cur=JSON.parse(localStorage.getItem(KEY)||'{}'),bm=JSON.parse(localStorage.getItem('bm_status')||'{}'),bmch=false;
+    Object.keys(mine).forEach(function(id){if(JSON.stringify(mine[id])!==JSON.stringify(before[id])){cur[id]=mine[id];var d=mine[id]&&S2D[mine[id].d];if(d&&bm[id]!==d){bm[id]=d;bmch=true;}}});
+    v=JSON.stringify(cur);last=v;orig.call(this,k,v);if(bmch)orig.call(this,'bm_status',JSON.stringify(bm));
+    var f=document.getElementById('dashframe');try{if(f&&f.contentWindow)f.contentWindow.dispatchEvent(new StorageEvent('storage',{key:KEY,newValue:v}))}catch(_){} return;}catch(_){}}
+  return orig.apply(this,arguments);};
 })();
 </script><!--/UX9--></body></html>
