@@ -956,10 +956,10 @@ addEventListener("message",e=>{ const d=e.data; if(d&&d.kepcoTab&&["summary","da
   function open(){ i=0; box.hidden=false; render(); }
   q.onclick=()=>{ if(box.hidden) open(); else done(); };
   if(!auto) return;
-  const start=()=>{ let seen=false; try{seen=localStorage.getItem(KEY)==="1"}catch(e){} if(!seen) open(); };
+  const start=()=>{ let seen=false; try{seen=sessionStorage.getItem("kx-guide-s")==="1"}catch(e){} if(!seen){ try{sessionStorage.setItem("kx-guide-s","1")}catch(e){} open(); } };
   const intro=document.getElementById("intro");
   let began=false,touched=false; ["click","touchstart","wheel"].forEach(ev=>addEventListener(ev,()=>{touched=true},{once:true,passive:true}));
-  const go=()=>{ if(began) return; began=true; setTimeout(()=>{ if(!touched) start(); },6000); };
+  const go=()=>{ if(began) return; began=true; setTimeout(start,700); };
   if(!intro||intro.hidden||getComputedStyle(intro).display==="none") go(); else { document.addEventListener("introdone",go,{once:true}); const iv=setInterval(()=>{ if(intro.hidden||getComputedStyle(intro).display==="none"||!document.body.contains(intro)){ clearInterval(iv); go(); } },300); }
 })();
 
@@ -1108,6 +1108,12 @@ body.kx-demo #toast{top:76px!important;bottom:auto!important}
  #sum .dec input,.segbar button,#report button,#vault button{min-height:44px!important}
 }
 @media (max-height:700px){#sum .subtabs{position:static!important}}
+/* UX16: 헤더 브랜드 줄 크기 통일 */
+.brand{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.brand .eyebrow{font-size:13px;line-height:30px;height:30px;letter-spacing:.02em}
+.brand .pill,.brand .kghelp{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:30px;min-height:30px;padding:0 12px;font-size:13px;font-weight:700;line-height:1;border-radius:999px;border-width:1.5px}
+.brand b{line-height:30px}
+@media(max-width:760px){.brand .kghelp{height:44px;min-height:44px;min-width:44px;padding:0 14px}}
 </style><script>(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
  var demo=/[?&]demo=1/.test(location.search);
  function blk(t){return [].slice.call(document.querySelectorAll('#sum .wrap > .blk')).find(function(b){return b.textContent.trim().indexOf(t)===0;});}
