@@ -1114,6 +1114,24 @@ body.kx-demo #toast{top:76px!important;bottom:auto!important}
 .brand .pill,.brand .kghelp{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:30px;min-height:30px;padding:0 12px;font-size:13px;font-weight:700;line-height:1;border-radius:999px;border-width:1.5px}
 .brand b{line-height:30px}
 @media(max-width:760px){.brand .kghelp{height:44px;min-height:44px;min-width:44px;padding:0 14px}}
+/* UX17: 결정 블록 크기·줄간격 통일, 사유 줄바꿈, 제목 하강부 잘림 방지 */
+.dec{gap:10px}
+.dec .bt{align-items:center;gap:8px}
+.dec .bt button,.dec .bt .dd{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:44px;min-height:44px;padding:0 16px;font-size:15px;font-weight:700;line-height:1;border-radius:999px;letter-spacing:0;white-space:nowrap}
+.dec .bt .dd{font-family:var(--f-body);font-size:13px;height:32px;min-height:32px;padding:0 12px;margin-left:auto}
+.dec .sim{font-size:14px;line-height:1.55}
+.dec textarea.kx-why{font:inherit;font-size:15px!important;line-height:1.5!important;color:#fff!important;background:#071A32;border:1px solid var(--line);border-radius:8px;padding:9px 12px!important;width:100%;box-sizing:border-box;resize:none;overflow:hidden;min-height:44px;display:block;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere}
+.dec textarea.kx-why:focus-visible{outline:2px solid #FFC857;outline-offset:2px}
+.dec input.kx-hid{display:none!important}
+#sum h3,#sum h4,#sum .card b,#sum .card .tt,#sum .card h3,#sum .row b{line-height:1.45;padding-bottom:1px;overflow:visible}
+/* UX18: 상단 탭 글씨 키움 */
+@media(min-width:761px){nav a[data-tab]{font-size:20px!important;font-weight:700;letter-spacing:-.2px;word-spacing:-2px;min-height:60px}
+nav a[data-tab] .n{font-size:15px!important;margin-right:8px}}
+@media(max-width:760px){nav a[data-tab]{font-size:16px!important}}
+@media(min-width:761px){.subtabs button{font-size:17px!important;min-height:44px;padding:0 20px!important}
+#sum .kpi i,#sum .kpi span,#sum .kpi small{font-size:16px!important}
+#sum .wrap > p,#sum .lead{font-size:16px!important}
+.dec .sim{font-size:15px}}
 </style><script>(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
  var demo=/[?&]demo=1/.test(location.search);
  function blk(t){return [].slice.call(document.querySelectorAll('#sum .wrap > .blk')).find(function(b){return b.textContent.trim().indexOf(t)===0;});}
@@ -1171,5 +1189,16 @@ body.kx-demo #toast{top:76px!important;bottom:auto!important}
     v=JSON.stringify(cur);last=v;orig.call(this,k,v);if(bmch)orig.call(this,'bm_status',JSON.stringify(bm));
     var f=document.getElementById('dashframe');try{if(f&&f.contentWindow)f.contentWindow.dispatchEvent(new StorageEvent('storage',{key:KEY,newValue:v}))}catch(_){} return;}catch(_){}}
   return orig.apply(this,arguments);};
+})();
+(function(){/* UX17: 사유 입력을 줄바꿈되는 칸으로 (원래 입력과 값 동기화) */
+ function grow(t){t.style.height='0px';var h=t.scrollHeight;t.style.height=Math.max(44,h+2)+'px';}
+ function up(){[].forEach.call(document.querySelectorAll('.dec input[type=text]:not(.kx-hid)'),function(i){
+   var t=document.createElement('textarea');t.className='kx-why';t.rows=1;t.value=i.value;t.placeholder=i.placeholder;t.setAttribute('aria-label',i.getAttribute('aria-label')||'결정 사유');
+   i.classList.add('kx-hid');i.insertAdjacentElement('afterend',t);grow(t);
+   t.addEventListener('input',function(){i.value=t.value.replace(/\n/g,' ');i.dispatchEvent(new Event('input',{bubbles:true}));grow(t);requestAnimationFrame(function(){grow(t)});});
+   t.addEventListener('change',function(){i.dispatchEvent(new Event('change',{bubbles:true}));});
+   t.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();t.blur();}});
+ });[].forEach.call(document.querySelectorAll('.dec textarea.kx-why'),function(t){if(t.offsetParent)grow(t);});}
+ up();setTimeout(up,600);setTimeout(up,1800);document.addEventListener('click',function(){setTimeout(up,250)});window.addEventListener('resize',function(){[].forEach.call(document.querySelectorAll('.dec textarea.kx-why'),grow)});
 })();
 </script><!--/UX9--></body></html>

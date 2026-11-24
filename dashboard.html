@@ -999,6 +999,12 @@ html body .subtabs{flex-wrap:wrap!important;overflow-x:visible!important}
  html body #tbl tr.main>td.c-title .tg{position:absolute!important;right:0;top:0;margin:0!important}
  html body #tbl tr.main>td{background:transparent!important}
 }
+/* UX19: 수집 채널 칩 시인성 — 세로 가운데 정렬, 글씨 키움, 숫자 흐름 구분 */
+#channels{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#channels .chip{display:inline-flex!important;align-items:center;gap:8px;min-height:44px!important;padding:0 16px!important;font-size:16px!important;font-weight:700;line-height:1.2;white-space:nowrap}
+#channels .chip small{font-size:15px;font-weight:500;opacity:.9;font-variant-numeric:tabular-nums}
+#channels .muted{font-size:15px!important;line-height:1.4}
+#sub{font-size:16px!important;line-height:1.5}
 </style><script>(function(){/* UX11: 대시보드 하위 탭 기억 */
  function mem(){var st=document.querySelector('.subtabs');if(!st||st.dataset.ux11)return;st.dataset.ux11=1;
   st.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b)try{localStorage.setItem('kx-dash-sub',b.dataset.p)}catch(_){}});
@@ -1086,6 +1092,10 @@ html body .subtabs{flex-wrap:wrap!important;overflow-x:visible!important}
   place();window.addEventListener('resize',place);setTimeout(place,500);document.addEventListener('click',function(){setTimeout(place,350)});if(window.ResizeObserver)new ResizeObserver(place).observe(svg);
  }
  init();setTimeout(init,600);setTimeout(init,1800);document.addEventListener('click',function(){setTimeout(init,300)});
+})();
+(function(){/* UX19: 채널 칩 화살표를 ›로 */
+ function fx(){var c=document.getElementById('channels');if(!c)return;[].forEach.call(c.querySelectorAll('small,.muted'),function(e){if(e.textContent.indexOf('→')>=0)e.textContent=e.textContent.replace(/→/g,' › ');});}
+ fx();setTimeout(fx,800);new MutationObserver(function(){fx()}).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script><!--/UX9--></body>
 </html>
