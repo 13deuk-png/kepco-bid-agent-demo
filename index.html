@@ -573,20 +573,20 @@ document.getElementById("note").addEventListener("click", e=>{
 /* ---- 그래프 (간단한 힘 기반 배치) ---- */
 const cv=document.getElementById("graph"), ctx=cv.getContext("2d");
 const nodes=[], links=[], idx={};
-SECT.filter(s=>bySec[s].length).forEach((s,i,a)=>{ const ang=i/a.length*Math.PI*2; const n={id:"s:"+s,label:s,hub:true,x:Math.cos(ang)*150,y:Math.sin(ang)*150,vx:0,vy:0,r:11+Math.sqrt(bySec[s].length)*2.6,col:"#70E1FF"}; idx[n.id]=n; nodes.push(n); });
-items.forEach(it=>{ const h=idx["s:"+it.sector]; const n={id:"i:"+it.id,label:it.summary_ko||it.title,hub:false,x:h.x+(Math.random()-.5)*80,y:h.y+(Math.random()-.5)*80,vx:0,vy:0,r:it.grade==="우선검토 추천"?7:it.grade==="검토"?5.2:4,col:gcol(it.grade),it}; idx[n.id]=n; nodes.push(n); links.push([h,n]); });
+SECT.filter(s=>bySec[s].length).forEach((s,i,a)=>{ const ang=i/a.length*Math.PI*2; const n={id:"s:"+s,label:s,hub:true,x:Math.cos(ang)*150,y:Math.sin(ang)*150,vx:0,vy:0,r:7+Math.sqrt(bySec[s].length)*1.5,col:"#70E1FF"}; idx[n.id]=n; nodes.push(n); });
+items.forEach(it=>{ const h=idx["s:"+it.sector]; const n={id:"i:"+it.id,label:it.summary_ko||it.title,hub:false,x:h.x+(Math.random()-.5)*80,y:h.y+(Math.random()-.5)*80,vx:0,vy:0,r:it.grade==="우선검토 추천"?4.6:it.grade==="검토"?3.4:2.6,col:gcol(it.grade),it}; idx[n.id]=n; nodes.push(n); links.push([h,n]); });
 // 같은 국가 사업끼리 약한 연결 (Obsidian 태그 링크처럼)
 const byC={}; items.forEach(it=>{ const k=it.country_ko||it.country; if(!k) return; (byC[k]=byC[k]||[]).push(idx["i:"+it.id]); });
 Object.values(byC).forEach(l=>{ for(let i=1;i<l.length;i++) links.push([l[0],l[i],true]); });
 let W=0,H=0,DPR=1, cam={x:0,y:0,k:1}, hover=null, alpha=1, userCam=false;
-function fit(){ let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; for(const n of nodes){ x0=Math.min(x0,n.x);x1=Math.max(x1,n.x);y0=Math.min(y0,n.y);y1=Math.max(y1,n.y);} cam.x=(x0+x1)/2; cam.y=(y0+y1)/2; cam.k=Math.min(W/(x1-x0+90), H/(y1-y0+90)); }
+function fit(){ let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9; for(const n of nodes){ x0=Math.min(x0,n.x);x1=Math.max(x1,n.x);y0=Math.min(y0,n.y);y1=Math.max(y1,n.y);} cam.x=(x0+x1)/2; cam.y=(y0+y1)/2; cam.k=Math.min(W/(x1-x0+120), H/(y1-y0+240)); cam.y+=34/Math.max(cam.k,.1); }
 function sizeCanvas(){ const r=cv.getBoundingClientRect(); if(!r.width) return; DPR=window.devicePixelRatio||1; W=r.width; H=r.height; cv.width=W*DPR; cv.height=H*DPR; alpha=Math.max(alpha,.3); }
 addEventListener("resize", sizeCanvas);
 function step(){
   if(alpha>0.01){
     for(const n of nodes){ n.vx*=.82; n.vy*=.82; n.vx-=n.x*.002; n.vy-=n.y*.002; }
-    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){ const a=nodes[i],b=nodes[j]; let dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy+.01; if(d2>40000) continue; const f=(a.hub&&b.hub?900:a.hub||b.hub?260:120)/d2; dx*=f; dy*=f; a.vx-=dx; a.vy-=dy; b.vx+=dx; b.vy+=dy; }
-    for(const [a,b,weak] of links){ const dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||1; const L=weak?60:a.hub?70:40, k=(weak?.004:.02)*(d-L)/d; a.vx+=dx*k*(a.hub?.3:1); a.vy+=dy*k*(a.hub?.3:1); b.vx-=dx*k; b.vy-=dy*k; }
+    for(let i=0;i<nodes.length;i++) for(let j=i+1;j<nodes.length;j++){ const a=nodes[i],b=nodes[j]; let dx=b.x-a.x, dy=b.y-a.y, d2=dx*dx+dy*dy+.01; if(d2>40000) continue; const f=(a.hub&&b.hub?1600:a.hub||b.hub?420:230)/d2; dx*=f; dy*=f; a.vx-=dx; a.vy-=dy; b.vx+=dx; b.vy+=dy; }
+    for(const [a,b,weak] of links){ const dx=b.x-a.x, dy=b.y-a.y, d=Math.sqrt(dx*dx+dy*dy)||1; const L=weak?80:a.hub?90:55, k=(weak?.004:.02)*(d-L)/d; a.vx+=dx*k*(a.hub?.3:1); a.vy+=dy*k*(a.hub?.3:1); b.vx-=dx*k; b.vy-=dy*k; }
     for(const n of nodes){ n.x+=n.vx*alpha; n.y+=n.vy*alpha; }
     alpha*=.995;
   }
@@ -600,11 +600,11 @@ function draw(){
   for(const [a,b,weak] of links){ const [x1,y1]=toS(a),[x2,y2]=toS(b); const hl=near.has(a.id)&&near.has(b.id)&&!weak;
     ctx.strokeStyle= hl? "rgba(168,139,250,.85)" : weak? "rgba(140,145,160,.10)" : "rgba(140,145,160,.22)"; ctx.lineWidth=hl?1.6:1; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); }
   for(const n of nodes){ const [x,y]=toS(n); const dim = !near.has(n.id) && sn && sn.hub && !n.hub; ctx.globalAlpha = dim? .35 : 1;
-    ctx.fillStyle=n.col; ctx.beginPath(); ctx.arc(x,y,n.r*Math.max(.8,cam.k),0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=n.col; ctx.beginPath(); ctx.arc(x,y,n.r*Math.min(1.5,Math.max(.8,Math.sqrt(cam.k))),0,Math.PI*2); ctx.fill();
     if(n.id===sel){ ctx.strokeStyle="#fff"; ctx.lineWidth=2; ctx.stroke(); } ctx.globalAlpha=1; }
   ctx.font="700 14px 'IBM Plex Sans KR',sans-serif"; ctx.textAlign="center";
   for(const n of nodes){ if(!(n.hub || n===hover || n.id===sel)) continue; const [x,y]=toS(n); const t=n.label.length>22?n.label.slice(0,21)+"…":n.label;
-    ctx.fillStyle="rgba(22,23,28,.88)"; const w=ctx.measureText(t).width+14; const yy=y+n.r*Math.max(.8,cam.k)+5; ctx.fillRect(x-w/2,yy,w,21); ctx.fillStyle=n.hub?"#F1ECFF":"#FFFFFF"; ctx.fillText(t,x,yy+15.5); }
+    ctx.fillStyle="rgba(22,23,28,.88)"; const w=ctx.measureText(t).width+14; const yy=y+n.r*Math.min(1.5,Math.max(.8,Math.sqrt(cam.k)))+5; ctx.fillRect(x-w/2,yy,w,21); ctx.fillStyle=n.hub?"#F1ECFF":"#FFFFFF"; ctx.fillText(t,x,yy+15.5); }
 }
 function pick(ev){ const r=cv.getBoundingClientRect(); const mx=ev.clientX-r.left, my=ev.clientY-r.top; let best=null,bd=1e9;
   for(const n of nodes){ const [x,y]=toS(n); const d=(x-mx)**2+(y-my)**2; const rr=Math.max(10,n.r*cam.k+4); if(d<rr*rr && d<bd){bd=d;best=n;} } return best; }
