@@ -1005,6 +1005,16 @@ html body .subtabs{flex-wrap:wrap!important;overflow-x:visible!important}
 #channels .chip small{font-size:15px;font-weight:500;opacity:.9;font-variant-numeric:tabular-nums}
 #channels .muted{font-size:15px!important;line-height:1.4}
 #sub{font-size:16px!important;line-height:1.5}
+/* UX20: 분야 칩 시인성 — 어두운 분야색 글씨를 밝게, 켜짐/꺼짐 구분 분명히 */
+#kx-sechint{font-size:15px!important;color:#c9d6e6!important;margin:4px 0 8px}
+#sectors{display:flex;flex-wrap:wrap;gap:8px}
+#sectors .chip{display:inline-flex!important;align-items:center;min-height:44px!important;padding:0 14px 0 8px!important;font-size:16px!important;font-weight:700;border:1.5px solid #4b6a8f!important;background:#12284a!important;color:#e9f1fb!important;border-radius:999px}
+#sectors .chip .sx{color:#e9f1fb!important;display:inline-flex;align-items:center;gap:8px}
+#sectors .chip .sx i{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:#ffffff26!important}
+#sectors .chip .sx svg{stroke:#fff!important;color:#fff;width:18px;height:18px}
+#sectors .chip[aria-pressed=true]{background:#1d4f7a!important;border-color:#70E1FF!important;color:#fff!important;box-shadow:0 0 0 1px #70E1FF55 inset}
+#sectors .chip[aria-pressed=false]{background:transparent!important;border-style:dashed!important;opacity:.95}
+#sectors .chip[aria-pressed=false] .sx{color:#c3d2e4!important}
 </style><script>(function(){/* UX11: 대시보드 하위 탭 기억 */
  function mem(){var st=document.querySelector('.subtabs');if(!st||st.dataset.ux11)return;st.dataset.ux11=1;
   st.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b)try{localStorage.setItem('kx-dash-sub',b.dataset.p)}catch(_){}});

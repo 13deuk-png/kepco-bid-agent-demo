@@ -1113,7 +1113,7 @@ body.kx-demo #toast{top:76px!important;bottom:auto!important}
 .brand .eyebrow{font-size:13px;line-height:30px;height:30px;letter-spacing:.02em}
 .brand .pill,.brand .kghelp{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;height:30px;min-height:30px;padding:0 12px;font-size:13px;font-weight:700;line-height:1;border-radius:999px;border-width:1.5px}
 .brand b{line-height:30px}
-@media(max-width:760px){.brand .kghelp{height:44px;min-height:44px;min-width:44px;padding:0 14px}}
+@media(max-width:760px){.brand{flex-wrap:nowrap}.brand .kghelp{height:30px!important;min-height:30px!important;min-width:30px!important;width:auto!important;padding:0 10px!important;font-size:13px!important;line-height:1!important;border-width:1.5px!important;position:relative}.brand .kghelp::after{content:'';position:absolute;inset:-7px}}
 /* UX17: 결정 블록 크기·줄간격 통일, 사유 줄바꿈, 제목 하강부 잘림 방지 */
 .dec{gap:10px}
 .dec .bt{align-items:center;gap:8px}
@@ -1132,6 +1132,10 @@ nav a[data-tab] .n{font-size:15px!important;margin-right:8px}}
 #sum .kpi i,#sum .kpi span,#sum .kpi small{font-size:16px!important}
 #sum .wrap > p,#sum .lead{font-size:16px!important}
 .dec .sim{font-size:15px}}
+/* UX21: 머리줄 네 요소 글꼴·크기 통일 */
+@media(min-width:761px){.brand .eyebrow{font-family:var(--f-body)!important;font-size:15px!important;letter-spacing:0!important;font-weight:600;color:#9fd8ff}
+.brand b{font-size:22px!important}
+.brand .pill,.brand .kghelp{font-family:var(--f-body)!important;font-size:15px!important;height:32px!important;min-height:32px!important;padding:0 14px!important}}
 </style><script>(function(){/* UX11: 숫자 카드를 누르면 해당 목록으로, 하위 탭·위치 기억 */
  var demo=/[?&]demo=1/.test(location.search);
  function blk(t){return [].slice.call(document.querySelectorAll('#sum .wrap > .blk')).find(function(b){return b.textContent.trim().indexOf(t)===0;});}
